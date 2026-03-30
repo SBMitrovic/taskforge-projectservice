@@ -44,7 +44,7 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ProjectResponse>> getProjectsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<ProjectResponse>> getProjectsByUser(@PathVariable("userId") Long userId) {
         List<ProjectResponse> projects = projectService.getProjectsForUser(userId)
                 .stream()
                 .map(this::toResponse)
@@ -53,7 +53,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectResponse> getProjectById(@PathVariable Long id) {
+    public ResponseEntity<ProjectResponse> getProjectById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(toResponse(projectService.getProjectById(id)));
     }
 
@@ -72,7 +72,7 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectResponse> updateProject(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody ProjectRequest request) {
         Project updatedProject = new Project();
         updatedProject.setName(request.getName());
@@ -82,22 +82,22 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable("id") Long id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/members")
     public ResponseEntity<ProjectResponse> addMember(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody MemberRequest request) {
         return ResponseEntity.ok(toResponse(projectService.addMember(id, request.getUserId())));
     }
 
     @DeleteMapping("/{id}/members/{userId}")
     public ResponseEntity<ProjectResponse> removeMember(
-            @PathVariable Long id,
-            @PathVariable Long userId) {
+            @PathVariable("id") Long id,
+            @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(toResponse(projectService.removeMember(id, userId)));
     }
 

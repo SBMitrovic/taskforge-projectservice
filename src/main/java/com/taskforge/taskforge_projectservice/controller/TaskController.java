@@ -26,7 +26,7 @@ public class TaskController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<TaskResponse>> getTasksByProject(@PathVariable Long projectId) {
+    public ResponseEntity<List<TaskResponse>> getTasksByProject(@PathVariable("projectId") Long projectId) {
         List<TaskResponse> tasks = taskService.getAllTasksByProject(projectId)
                 .stream()
                 .map(this::toResponse)
@@ -46,7 +46,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<TaskResponse> getTaskById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(toResponse(taskService.getTaskById(id)));
     }
 
@@ -64,7 +64,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody TaskRequest request) {
         Project project = projectService.getProjectById(request.getProjectId());
         Task updatedTask = new Task();
@@ -78,13 +78,13 @@ public class TaskController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<TaskResponse> updateTaskStatus(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @Valid @RequestBody TaskStatusRequest request) {
         return ResponseEntity.ok(toResponse(taskService.updateTaskStatus(id, request.getStatus())));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable("id") Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
